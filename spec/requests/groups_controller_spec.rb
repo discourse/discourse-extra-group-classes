@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "Extra Classes" do
+describe "Groups Controller" do
 
   fab!(:user) { Fabricate(:user) }
   fab!(:admin) { Fabricate(:admin) }
@@ -17,10 +17,19 @@ describe "Extra Classes" do
 
     expect(response.status).to eq(200)
 
-    puts group.id
-    puts group.reload.custom_fields
-
     expect(group.reload.custom_fields["extra_group_classes"]).to eq("a|b|c")
+  end
+
+  it "should 404 for a normal user" do
+    sign_in(user)
+
+    put "/admin/groups/#{group.id}/extra_classes", params: {
+          classes: "a|b|c"
+        }
+
+    expect(response.status).to eq(404)
+
+    expect(group.reload.custom_fields["extra_group_classes"]).to be_nil
   end
 
 end

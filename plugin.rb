@@ -13,7 +13,7 @@ end
 after_initialize do
   Discourse::Application.routes.append do
     namespace :admin, constraints: AdminConstraint.new do
-      put 'groups/:id/extra_classes' => 'groups#update_extra_group_classes', constraints: { id: /\d+/ }
+      put 'groups/:id/extra_classes' => 'groups#update_extra_group_classes', defaults: { format: :json }, constraints: { id: /\d+/ }
     end
   end
 
@@ -30,16 +30,14 @@ after_initialize do
   end
 
   add_to_class(Admin::GroupsController, :update_extra_group_classes) do
-    Rails.logger.warn "updating extra group classes"
-    puts "why can I not see this"
     params.require(:classes)
     params.require(:id)
 
     # 20 character class words, dash separated. Each class is separated by |.
     # Regex supports up to 6 words, and up to 20 classes.
-    # valid_regex = /\A[a-z0-9]{1,20}([\-.]{1}[a-z0-9]{1,20}){0,5}(\|[a-z0-9]{1,20}([\-.]{1}[a-z0-9]{1,20}){0,5}){0,20}\Z/i
+    valid_regex = /\A[a-z0-9]{1,20}([\-.]{1}[a-z0-9]{1,20}){0,5}(\|[a-z0-9]{1,20}([\-.]{1}[a-z0-9]{1,20}){0,5}){0,20}\Z/i
 
-    # raise Discourse::InvalidParameters unless classes_params[:classes].match(valid_regex)
+    raise Discourse::InvalidParameters unless params[:classes].match(valid_regex)
 
     group = Group.find(params[:id])
     group.custom_fields[ExtraGroupClasses::CUSTOM_FIELD] = params[:classes]
