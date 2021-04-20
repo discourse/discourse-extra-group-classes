@@ -17,20 +17,33 @@ after_initialize do
     end
   end
 
-  register_group_custom_field_type(ExtraGroupClasses.CUSTOM_FIELD, :text)
+  add_preloaded_group_custom_field(ExtraGroupClasses::CUSTOM_FIELD)
+
+  [:basic_group, :group_show].each do |s|
+    add_to_serializer(s, ExtraGroupClasses::CUSTOM_FIELD.to_sym, false) do
+      object.custom_fields[ExtraGroupClasses::CUSTOM_FIELD]
+    end
+
+    add_to_serializer(s, "include_#{ExtraGroupClasses::CUSTOM_FIELD}?".to_sym) do
+      true
+    end
+  end
 
   add_to_class(Admin::GroupsController, :update_extra_group_classes) do
-    classes_params = params.require(:classes)
+    Rails.logger.warn "updating extra group classes"
+    puts "why can I not see this"
+    params.require(:classes)
+    params.require(:id)
 
     # 20 character class words, dash separated. Each class is separated by |.
     # Regex supports up to 6 words, and up to 20 classes.
-    valid_regex = /\A[a-z0-9]{1,20}([\-.]{1}[a-z0-9]{1,20}){0,5}(\|[a-z0-9]{1,20}([\-.]{1}[a-z0-9]{1,20}){0,5}){0,20}\Z/i
+    # valid_regex = /\A[a-z0-9]{1,20}([\-.]{1}[a-z0-9]{1,20}){0,5}(\|[a-z0-9]{1,20}([\-.]{1}[a-z0-9]{1,20}){0,5}){0,20}\Z/i
 
-    return unless classes_params[:classes].match(valid_regex)
+    # raise Discourse::InvalidParameters unless classes_params[:classes].match(valid_regex)
 
     group = Group.find(params[:id])
-    group.custom_fields[ExtraGroupClasses.CUSTOM_FIELD] = classes_params[:classes]
-    group.save
+    group.custom_fields[ExtraGroupClasses::CUSTOM_FIELD] = params[:classes]
+    group.save_custom_fields
 
     render json: success_json
   end
