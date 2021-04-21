@@ -3,3 +3,4 @@ en:
     extra_group_classes:
       title: "Extra HTML classes"
       description: "Extra html classes to be added on posts made by primary group members. Alphanumeric characters and dashes only."
+      save_error: "Ensure classes are short, and contain alphanumeric letters and dashes only"
