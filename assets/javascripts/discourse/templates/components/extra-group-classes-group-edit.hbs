@@ -2,19 +2,21 @@
 {{#if group.id}}
 
   <div class="control-group">
-    <label>
-      {{list-setting
-        name="extra_classes"
-        class="extra-classes"
-        value=extraClasses
-        choices=extraClasses
-        settingName="name"
-        nameProperty=null
-        valueProperty=null
-        onChange=(action "extraGroupClassesChanged")
-        options=(hash allowAny=true)
-      }}
-      {{i18n 'extra_group_classes.description'}}
+    <label class="control-label">{{i18n "extra_group_classes.title"}}</label>
+
+    <label for="extra_classes">
+      {{i18n "extra_group_classes.description"}}
     </label>
+    {{list-setting
+      name="extra_classes"
+      class="extra-classes"
+      value=extraClasses
+      choices=extraClasses
+      settingName="name"
+      nameProperty=null
+      valueProperty=null
+      onChange=(action "extraGroupClassesChanged")
+      options=(hash allowAny=true)
+    }}
   </div>
 {{/if}}
