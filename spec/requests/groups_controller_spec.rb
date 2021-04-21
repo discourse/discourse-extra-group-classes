@@ -11,7 +11,7 @@ describe "Groups Controller" do
   it "should update when updated as an admin" do
     sign_in(admin)
     put "/admin/groups/#{group.id}/extra_classes", params: {
-          classes: "a|b|c"
+          extra_classes: "a|b|c"
         }
 
     expect(response.status).to eq(200)
@@ -21,17 +21,17 @@ describe "Groups Controller" do
   it "should error when the class list is too long" do
     sign_in(admin)
     put "/admin/groups/#{group.id}/extra_classes", params: {
-          classes: "something-with-wayyyyyy-too-many-words-here"
+          extra_classes: "something-with-wayyyyyy-too-many-words-here"
         }
     expect(response.status).to eq(400)
 
     put "/admin/groups/#{group.id}/extra_classes", params: {
-          classes: "areallyreallyreallylongwordherethisistoolongwaywaytoolong"
+          extra_classes: "areallyreallyreallylongwordherethisistoolongwaywaytoolong"
         }
     expect(response.status).to eq(400)
 
     put "/admin/groups/#{group.id}/extra_classes", params: {
-          classes: "way|too|may|classes|here|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s"
+          extra_classes: "way|too|may|classes|here|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s"
         }
     expect(response.status).to eq(400)
 
@@ -41,7 +41,7 @@ describe "Groups Controller" do
   it "should 404 for a normal user" do
     sign_in(user)
     put "/admin/groups/#{group.id}/extra_classes", params: {
-          classes: "a|b|c"
+          extra_classes: "a|b|c"
         }
 
     expect(response.status).to eq(404)

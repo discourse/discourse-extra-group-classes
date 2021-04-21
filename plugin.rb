@@ -30,17 +30,17 @@ after_initialize do
   end
 
   add_to_class(Admin::GroupsController, :update_extra_group_classes) do
-    params.require(:classes)
+    params.require(:extra_classes)
     params.require(:id)
 
     # 20 character class words, dash separated. Each class is separated by |.
     # Regex supports up to 6 words, and up to 20 classes.
     valid_regex = /\A[a-z0-9]{1,20}([\-.]{1}[a-z0-9]{1,20}){0,5}(\|[a-z0-9]{1,20}([\-.]{1}[a-z0-9]{1,20}){0,5}){0,20}\Z/i
 
-    raise Discourse::InvalidParameters unless params[:classes].match(valid_regex)
+    raise Discourse::InvalidParameters unless params[:extra_classes].match(valid_regex)
 
     group = Group.find(params[:id])
-    group.custom_fields[ExtraGroupClasses::CUSTOM_FIELD] = params[:classes]
+    group.custom_fields[ExtraGroupClasses::CUSTOM_FIELD] = params[:extra_classes]
     group.save_custom_fields
 
     render json: success_json
