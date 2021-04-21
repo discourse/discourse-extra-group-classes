@@ -7,7 +7,7 @@
 # url: https://github.com/discourse/discourse-extra-group-class
 
 module ExtraGroupClasses
-  CUSTOM_FIELD = 'extra_group_classes'
+  CUSTOM_FIELD = 'extra_classes'
 end
 
 after_initialize do

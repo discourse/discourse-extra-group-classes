@@ -15,7 +15,7 @@ describe "Groups Controller" do
         }
 
     expect(response.status).to eq(200)
-    expect(group.reload.custom_fields["extra_group_classes"]).to eq("a|b|c")
+    expect(group.reload.custom_fields["extra_classes"]).to eq("a|b|c")
   end
 
   it "should error when the class list is too long" do
@@ -35,7 +35,7 @@ describe "Groups Controller" do
         }
     expect(response.status).to eq(400)
 
-    expect(group.reload.custom_fields["extra_group_classes"]).to be_nil
+    expect(group.reload.custom_fields["extra_classes"]).to be_nil
   end
 
   it "should 404 for a normal user" do
@@ -45,7 +45,7 @@ describe "Groups Controller" do
         }
 
     expect(response.status).to eq(404)
-    expect(group.reload.custom_fields["extra_group_classes"]).to be_nil
+    expect(group.reload.custom_fields["extra_classes"]).to be_nil
   end
 
 end

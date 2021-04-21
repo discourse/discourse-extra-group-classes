@@ -1,0 +1,5 @@
+en:
+  js:
+    extra_group_classes:
+      description: "extra html classes to add to group members' posts"
+      placeholder: "placeholder test"
