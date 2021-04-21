@@ -29,6 +29,15 @@ after_initialize do
     end
   end
 
+  add_to_serializer(:post, :extra_classes, false) do
+    fields = object.user&.primary_group&.custom_fields
+    fields[ExtraGroupClasses::CUSTOM_FIELD] unless fields.nil?
+  end
+  add_to_serializer(:post, :include_extra_classes?) do
+    fields = object.user&.primary_group&.custom_fields
+    !fields.nil? && !fields[ExtraGroupClasses::CUSTOM_FIELD].blank?
+  end
+
   add_to_class(Admin::GroupsController, :update_extra_group_classes) do
     params.require(:extra_classes)
     params.require(:id)
