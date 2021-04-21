@@ -3,11 +3,17 @@
 
   <div class="control-group">
     <label>
-      {{text-field name="tracked_post_icon"
-        value=group.extra_classes
-        focus-out=(action "extraClassesChanged")
-        placeholderKey="extra_group_classes.placeholder"
-        disabled=(if group.track_posts false true)}}
+      {{list-setting
+        name="extra_classes"
+        class="extra-classes"
+        value=extraClasses
+        choices=extraClasses
+        settingName="name"
+        nameProperty=null
+        valueProperty=null
+        onChange=(action "extraGroupClassesChanged")
+        options=(hash allowAny=true)
+      }}
       {{i18n 'extra_group_classes.description'}}
     </label>
   </div>
