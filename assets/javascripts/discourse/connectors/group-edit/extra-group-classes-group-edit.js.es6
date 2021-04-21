@@ -10,7 +10,7 @@ export default {
 
   actions: {
     extraGroupClassesChanged(value) {
-      newValue = value.join(this.tokenSeparator);
+      let newValue = value.join(this.tokenSeparator);
       group.set("extra_classes", newValue);
 
       return ajax(`/admin/groups/${group.id}/extra_classes`, {
