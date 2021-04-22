@@ -8,6 +8,7 @@
 
 module ExtraGroupClasses
   CUSTOM_FIELD = 'extra_classes'
+  CUSTOM_USER_FIELD = 'primary_group_extra_classes'
 end
 
 after_initialize do
@@ -20,12 +21,20 @@ after_initialize do
   add_preloaded_group_custom_field(ExtraGroupClasses::CUSTOM_FIELD)
 
   [:basic_group, :group_show].each do |s|
-    add_to_serializer(s, ExtraGroupClasses::CUSTOM_FIELD.to_sym, false) do
+    add_to_serializer(s, ExtraGroupClasses::CUSTOM_FIELD.to_sym) do
       object.custom_fields[ExtraGroupClasses::CUSTOM_FIELD]
     end
+  end
 
-    add_to_serializer(s, "include_#{ExtraGroupClasses::CUSTOM_FIELD}?".to_sym) do
-      true
+  add_to_serializer(:group_post, ExtraGroupClasses::CUSTOM_FIELD.to_sym) do
+    g = object&.user&.primary_group
+    g.custom_fields[ExtraGroupClasses::CUSTOM_FIELD] unless g.nil?
+  end
+
+  [:user, :user_card].each do |s|
+    add_to_serializer(s, ExtraGroupClasses::CUSTOM_USER_FIELD.to_sym) do
+      g = object&.primary_group
+      g.custom_fields[ExtraGroupClasses::CUSTOM_FIELD] unless g.nil?
     end
   end
 
