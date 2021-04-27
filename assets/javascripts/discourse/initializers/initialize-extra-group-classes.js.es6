@@ -1,4 +1,5 @@
 import { computed } from "@ember/object";
+import discourseComputed from "discourse-common/utils/decorators";
 import { withPluginApi } from "discourse/lib/plugin-api";
 
 // Takes a list of classes like my-class1|my-class2
@@ -21,11 +22,17 @@ export default {
         }
       });
 
-      // decorate avatar classes
-      api.customUserAvatarClasses((user) => {
-        if (user.primary_group_extra_classes) {
-          return parseClasses(user.primary_group_extra_classes);
-        }
+      api.modifyClass("component:user-card-contents", {
+        @discourseComputed("user")
+        extraClasses(user) {
+          console.log(user);
+          if (user && user.primary_group_extra_classes) {
+            let classes = user.primary_group_extra_classes;
+            classes = parseClasses(classes).join(" ");
+            return classes;
+          }
+        },
+        classNameBindings: ["extraClasses"],
       });
 
       // decorate group posts
