@@ -35,6 +35,19 @@ export default {
         classNameBindings: ["extraClasses"],
       });
 
+      api.modifyClass("controller:user", {
+        @discourseComputed("model.primary_group_name")
+        primaryGroup(group) {
+          let groupClasses = this._super(...arguments);
+          if (this.model && this.model.primary_group_extra_classes) {
+            let classes = this.model.primary_group_extra_classes;
+            classes = parseClasses(classes).join(" ");
+            groupClasses = `${groupClasses} ${classes}`;
+          }
+          return groupClasses;
+        },
+      });
+
       // decorate group posts
       api.modifyClass("component:group-post", {
         extraClasses: computed(function () {
@@ -46,6 +59,8 @@ export default {
         }),
         classNameBindings: ["extraClasses"],
       });
+
+      // TODO: add classes to quotes?
     });
   },
 };
