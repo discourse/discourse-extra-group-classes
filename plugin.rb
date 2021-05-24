@@ -68,4 +68,19 @@ after_initialize do
 
     render json: success_json
   end
+
+  # add extra classes to quotes
+  Plugin::Filter.register(:after_post_cook) do |post, cooked|
+    doc = Loofah.fragment(cooked)
+    doc.css("aside.quote").each do |q|
+      username = q['data-username']
+      fields = User.find_by(username: username)&.primary_group&.custom_fields
+      if !fields.nil? && !fields[ExtraGroupClasses::CUSTOM_FIELD].blank?
+        extra_classes = fields[ExtraGroupClasses::CUSTOM_FIELD]
+          .split('|').map { |group| "g-#{group}" }.join(" ")
+        q['class'] = ((q['class'] || '') + " #{extra_classes}").strip
+      end
+    end
+    doc.try(:to_html)
+  end
 end

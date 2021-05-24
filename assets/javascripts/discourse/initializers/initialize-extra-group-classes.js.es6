@@ -24,7 +24,6 @@ export default {
       api.modifyClass("component:user-card-contents", {
         @discourseComputed("user")
         extraClasses(user) {
-          console.log(user);
           if (user && user.primary_group_extra_classes) {
             let classes = user.primary_group_extra_classes;
             classes = parseClasses(classes).join(" ");
@@ -77,8 +76,6 @@ export default {
           return parseClasses(attrs.primary_group_extra_classes);
         }
       });
-
-      // TODO: add classes to quotes?
     });
   },
 };
