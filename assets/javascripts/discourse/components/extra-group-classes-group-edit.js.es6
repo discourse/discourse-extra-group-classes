@@ -7,7 +7,12 @@ export default Component.extend({
   tokenSeparator: "|",
 
   extraClasses: computed("group.extra_classes", function () {
-    return this.group.extra_classes.split(this.tokenSeparator).filter(Boolean);
+    if (this.group.extra_classes) {
+      return this.group.extra_classes
+        .split(this.tokenSeparator)
+        .filter(Boolean);
+    }
+    return null;
   }),
 
   actions: {

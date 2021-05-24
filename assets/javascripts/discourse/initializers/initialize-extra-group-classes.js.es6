@@ -4,8 +4,7 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 
 // Takes a list of classes like my-class1|my-class2
 // and returns an array of the form ["g-my-class1", "g-my-class2"]
-function parseClasses(classList) {
-  let prefix = "g-";
+function parseClasses(classList, prefix = "g-") {
   let separator = "|";
   return classList.split(separator).map((c) => prefix + c);
 }
@@ -14,7 +13,7 @@ export default {
   name: "extra-group-classes",
   initialize() {
     // decorate posts within topics
-    withPluginApi("0.11.2", (api) => {
+    withPluginApi("0.11.4", (api) => {
       api.includePostAttributes("extra_classes");
       api.addPostClassesCallback((attrs) => {
         if (attrs.extra_classes) {
@@ -58,6 +57,25 @@ export default {
           }
         }),
         classNameBindings: ["extraClasses"],
+      });
+
+      // decorate extra classes on body of current user
+      if (api.getCurrentUser()) {
+        let user = api.getCurrentUser();
+        if (user.primary_group_extra_classes) {
+          let classes = parseClasses(
+            user.primary_group_extra_classes,
+            "primary-group-extra-"
+          );
+          document.querySelector("body").classList.add(...classes);
+        }
+      }
+
+      // decorate participant lists
+      api.addTopicParticipantClassesCallback((attrs) => {
+        if (attrs.primary_group_extra_classes) {
+          return parseClasses(attrs.primary_group_extra_classes);
+        }
       });
 
       // TODO: add classes to quotes?

@@ -4,7 +4,7 @@
 # about: Adds the ability to add extra css classes to primary groups
 # version: 0.1
 # authors: Jeff Wong
-# url: https://github.com/discourse/discourse-extra-group-class
+# url: https://github.com/discourse/discourse-extra-group-classes
 
 module ExtraGroupClasses
   CUSTOM_FIELD = 'extra_classes'
@@ -31,11 +31,16 @@ after_initialize do
     g.custom_fields[ExtraGroupClasses::CUSTOM_FIELD] unless g.nil?
   end
 
-  [:user, :user_card].each do |s|
+  [:user, :current_user, :user_card].each do |s|
     add_to_serializer(s, ExtraGroupClasses::CUSTOM_USER_FIELD.to_sym) do
       g = object&.primary_group
       g.custom_fields[ExtraGroupClasses::CUSTOM_FIELD] unless g.nil?
     end
+  end
+
+  add_to_serializer(:topic_post_count, ExtraGroupClasses::CUSTOM_USER_FIELD.to_sym) do
+    g = object[:user]&.primary_group
+    g.custom_fields[ExtraGroupClasses::CUSTOM_FIELD] unless g.nil?
   end
 
   add_to_serializer(:post, :extra_classes, false) do
