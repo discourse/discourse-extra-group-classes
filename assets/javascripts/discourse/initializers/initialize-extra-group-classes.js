@@ -1,6 +1,6 @@
 import { computed } from "@ember/object";
-import discourseComputed from "discourse-common/utils/decorators";
 import { withPluginApi } from "discourse/lib/plugin-api";
+import discourseComputed from "discourse-common/utils/decorators";
 
 // Takes a list of classes like my-class1|my-class2
 // and returns an array of the form ["g-my-class1", "g-my-class2"]
@@ -35,7 +35,7 @@ export default {
 
       api.modifyClass("controller:user", {
         @discourseComputed("model.primary_group_name")
-        primaryGroup(group) {
+        primaryGroup() {
           let groupClasses = this._super(...arguments);
           if (this.model && this.model.primary_group_extra_classes) {
             let classes = this.model.primary_group_extra_classes;
