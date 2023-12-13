@@ -7,20 +7,26 @@
 # url: https://github.com/discourse/discourse-extra-group-classes
 
 module ExtraGroupClasses
-  CUSTOM_FIELD = 'extra_classes'
-  CUSTOM_USER_FIELD = 'primary_group_extra_classes'
+  CUSTOM_FIELD = "extra_classes"
+  CUSTOM_USER_FIELD = "primary_group_extra_classes"
 end
 
 after_initialize do
   Discourse::Application.routes.append do
     namespace :admin, constraints: AdminConstraint.new do
-      put 'groups/:id/extra_classes' => 'groups#update_extra_group_classes', defaults: { format: :json }, constraints: { id: /\d+/ }
+      put "groups/:id/extra_classes" => "groups#update_extra_group_classes",
+          :defaults => {
+            format: :json,
+          },
+          :constraints => {
+            id: /\d+/,
+          }
     end
   end
 
   add_preloaded_group_custom_field(ExtraGroupClasses::CUSTOM_FIELD)
 
-  [:basic_group, :group_show].each do |s|
+  %i[basic_group group_show].each do |s|
     add_to_serializer(s, ExtraGroupClasses::CUSTOM_FIELD.to_sym) do
       object.custom_fields[ExtraGroupClasses::CUSTOM_FIELD]
     end
@@ -31,7 +37,7 @@ after_initialize do
     g.custom_fields[ExtraGroupClasses::CUSTOM_FIELD] unless g.nil?
   end
 
-  [:user, :current_user, :user_card].each do |s|
+  %i[user current_user user_card].each do |s|
     add_to_serializer(s, ExtraGroupClasses::CUSTOM_USER_FIELD.to_sym) do
       g = object&.primary_group
       g.custom_fields[ExtraGroupClasses::CUSTOM_FIELD] unless g.nil?
@@ -58,7 +64,8 @@ after_initialize do
 
     # 20 character class words, dash separated. Each class is separated by |.
     # Regex supports up to 6 words, and up to 20 classes.
-    valid_regex = /\A[a-z0-9]{1,20}([\-.]{1}[a-z0-9]{1,20}){0,5}(\|[a-z0-9]{1,20}([\-.]{1}[a-z0-9]{1,20}){0,5}){0,20}\Z/i
+    valid_regex =
+      /\A[a-z0-9]{1,20}([\-.]{1}[a-z0-9]{1,20}){0,5}(\|[a-z0-9]{1,20}([\-.]{1}[a-z0-9]{1,20}){0,5}){0,20}\Z/i
 
     raise Discourse::InvalidParameters unless params[:extra_classes].match(valid_regex)
 
@@ -72,15 +79,20 @@ after_initialize do
   # add extra classes to quotes
   Plugin::Filter.register(:after_post_cook) do |post, cooked|
     doc = Loofah.fragment(cooked)
-    doc.css("aside.quote").each do |q|
-      username = q['data-username']
-      fields = User.find_by(username: username)&.primary_group&.custom_fields
-      if !fields.nil? && !fields[ExtraGroupClasses::CUSTOM_FIELD].blank?
-        extra_classes = fields[ExtraGroupClasses::CUSTOM_FIELD]
-          .split('|').map { |group| "g-#{group}" }.join(" ")
-        q['class'] = ((q['class'] || '') + " #{extra_classes}").strip
+    doc
+      .css("aside.quote")
+      .each do |q|
+        username = q["data-username"]
+        fields = User.find_by(username: username)&.primary_group&.custom_fields
+        if !fields.nil? && !fields[ExtraGroupClasses::CUSTOM_FIELD].blank?
+          extra_classes =
+            fields[ExtraGroupClasses::CUSTOM_FIELD]
+              .split("|")
+              .map { |group| "g-#{group}" }
+              .join(" ")
+          q["class"] = ((q["class"] || "") + " #{extra_classes}").strip
+        end
       end
-    end
     doc.try(:to_html)
   end
 end

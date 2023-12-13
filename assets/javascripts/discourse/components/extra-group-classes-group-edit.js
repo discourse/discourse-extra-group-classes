@@ -1,7 +1,8 @@
 import Component from "@ember/component";
-import { ajax } from "discourse/lib/ajax";
 import { computed } from "@ember/object";
 import bootbox from "bootbox";
+import { ajax } from "discourse/lib/ajax";
+import I18n from "discourse-i18n";
 
 export default Component.extend({
   tokenSeparator: "|",
@@ -26,7 +27,7 @@ export default Component.extend({
       return ajax(`/admin/groups/${group.id}/extra_classes`, {
         type: "PUT",
         data: group.getProperties("extra_classes"),
-      }).catch((e) => {
+      }).catch(() => {
         group.set("extra_classes", oldValue);
         bootbox.alert(
           I18n.t("generic_error_with_reason", {
