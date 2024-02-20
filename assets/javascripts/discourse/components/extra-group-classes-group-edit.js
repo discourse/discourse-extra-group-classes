@@ -1,10 +1,11 @@
 import Component from "@ember/component";
 import { computed } from "@ember/object";
-import bootbox from "bootbox";
+import { inject as service } from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
 import I18n from "discourse-i18n";
 
 export default Component.extend({
+  dialog: service(),
   tokenSeparator: "|",
 
   extraClasses: computed("group.extra_classes", function () {
@@ -29,7 +30,7 @@ export default Component.extend({
         data: group.getProperties("extra_classes"),
       }).catch(() => {
         group.set("extra_classes", oldValue);
-        bootbox.alert(
+        this.dialog.alert(
           I18n.t("generic_error_with_reason", {
             error: I18n.t("extra_group_classes.save_error"),
           })
