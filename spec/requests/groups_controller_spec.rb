@@ -3,9 +3,9 @@
 require "rails_helper"
 
 describe "Groups Controller" do
-  fab!(:user) { Fabricate(:user) }
-  fab!(:admin) { Fabricate(:admin) }
-  fab!(:group) { Fabricate(:group) }
+  fab!(:user)
+  fab!(:admin)
+  fab!(:group)
 
   it "should update when updated as an admin" do
     sign_in(admin)
