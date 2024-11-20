@@ -1,5 +1,5 @@
 {{! Only show these fields when editing an existing group }}
-{{#if group.id}}
+{{#if this.group.id}}
 
   <div class="control-group">
     <label class="control-label">{{i18n "extra_group_classes.title"}}</label>
@@ -10,8 +10,8 @@
     {{list-setting
       name="extra_classes"
       class="extra-classes"
-      value=extraClasses
-      choices=extraClasses
+      value=this.extraClasses
+      choices=this.extraClasses
       settingName="name"
       nameProperty=null
       valueProperty=null
