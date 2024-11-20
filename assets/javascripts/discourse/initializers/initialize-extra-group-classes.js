@@ -66,7 +66,7 @@ export default {
             user.primary_group_extra_classes,
             "primary-group-extra-"
           );
-          document.querySelector("body").classList.add(...classes);
+          document.body.classList.add(...classes);
         }
       }
 
