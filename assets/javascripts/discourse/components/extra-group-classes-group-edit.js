@@ -2,7 +2,7 @@ import Component from "@ember/component";
 import { action, computed } from "@ember/object";
 import { service } from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
-import I18n from "discourse-i18n";
+import { i18n } from "discourse-i18n";
 
 export default class ExtraGroupClassesGroupEdit extends Component {
   @service dialog;
@@ -33,8 +33,8 @@ export default class ExtraGroupClassesGroupEdit extends Component {
     }).catch(() => {
       group.set("extra_classes", oldValue);
       this.dialog.alert(
-        I18n.t("generic_error_with_reason", {
-          error: I18n.t("extra_group_classes.save_error"),
+        i18n("generic_error_with_reason", {
+          error: i18n("extra_group_classes.save_error"),
         })
       );
     });
