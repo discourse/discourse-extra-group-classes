@@ -1,6 +1,6 @@
 import { computed } from "@ember/object";
+import discourseComputed from "discourse/lib/decorators";
 import { withPluginApi } from "discourse/lib/plugin-api";
-import discourseComputed from "discourse-common/utils/decorators";
 
 // Takes a list of classes like my-class1|my-class2
 // and returns an array of the form ["g-my-class1", "g-my-class2"]
