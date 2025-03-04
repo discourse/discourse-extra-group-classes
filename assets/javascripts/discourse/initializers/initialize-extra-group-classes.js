@@ -21,42 +21,55 @@ export default {
         }
       });
 
-      api.modifyClass("component:user-card-contents", {
-        @discourseComputed("user")
-        extraClasses(user) {
-          if (user && user.primary_group_extra_classes) {
-            let classes = user.primary_group_extra_classes;
-            classes = parseClasses(classes).join(" ");
-            return classes;
+      api.modifyClass(
+        "component:user-card-contents",
+        (Superclass) =>
+          class extends Superclass {
+            get classNames() {
+              const extraClasses = [];
+              if (this.user && this.user.primary_group_extra_classes) {
+                let classes = this.user.primary_group_extra_classes;
+                classes = parseClasses(classes);
+                return extraClasses.concat(classes);
+              }
+              return [...super.classNames, ...extraClasses];
+            }
           }
-        },
-        classNameBindings: ["extraClasses"],
-      });
+      );
 
-      api.modifyClass("controller:user", {
-        @discourseComputed("model.primary_group_name")
-        primaryGroup() {
-          let groupClasses = this._super(...arguments);
-          if (this.model && this.model.primary_group_extra_classes) {
-            let classes = this.model.primary_group_extra_classes;
-            classes = parseClasses(classes).join(" ");
-            groupClasses = `${groupClasses} ${classes}`;
+      api.modifyClass(
+        "controller:user",
+        (Superclass) =>
+          class extends Superclass {
+            @discourseComputed("model.primary_group_name")
+            primaryGroup() {
+              let groupClasses = super.primaryGroup(...arguments);
+              if (this.model && this.model.primary_group_extra_classes) {
+                let classes = this.model.primary_group_extra_classes;
+                classes = parseClasses(classes).join(" ");
+                groupClasses = `${groupClasses} ${classes}`;
+              }
+              return groupClasses;
+            }
           }
-          return groupClasses;
-        },
-      });
+      );
 
       // decorate group posts
-      api.modifyClass("component:group-post", {
-        extraClasses: computed(function () {
-          if (this.post && this.post.extra_classes) {
-            let classes = this.post.extra_classes;
-            classes = parseClasses(classes).join(" ");
-            return classes;
+      api.modifyClass(
+        "component:group-post",
+        (Superclass) =>
+          class extends Superclass {
+            get classNames() {
+              const extraClasses = [];
+              if (this.post && this.post.extra_classes) {
+                let classes = this.post.extra_classes;
+                classes = parseClasses(classes);
+                extraClasses.concat(classes);
+              }
+              return [...super.classNames, ...extraClasses];
+            }
           }
-        }),
-        classNameBindings: ["extraClasses"],
-      });
+      );
 
       // decorate extra classes on body of current user
       if (api.getCurrentUser()) {
