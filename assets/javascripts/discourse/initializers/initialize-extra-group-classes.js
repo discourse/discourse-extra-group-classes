@@ -42,7 +42,7 @@ export default {
           class extends Superclass {
             @discourseComputed("model.primary_group_name")
             primaryGroup() {
-              let groupClasses = super.primaryGroup(...arguments);
+              let groupClasses = super.primaryGroup;
               if (this.model && this.model.primary_group_extra_classes) {
                 let classes = this.model.primary_group_extra_classes;
                 classes = parseClasses(classes).join(" ");
