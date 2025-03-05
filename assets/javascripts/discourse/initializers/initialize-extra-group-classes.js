@@ -1,4 +1,3 @@
-import { computed } from "@ember/object";
 import discourseComputed from "discourse/lib/decorators";
 import { withPluginApi } from "discourse/lib/plugin-api";
 
