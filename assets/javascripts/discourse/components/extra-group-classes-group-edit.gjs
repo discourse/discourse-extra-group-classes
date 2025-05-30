@@ -1,8 +1,10 @@
 import Component from "@ember/component";
+import { hash } from "@ember/helper";
 import { action, computed } from "@ember/object";
 import { service } from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
 import { i18n } from "discourse-i18n";
+import ListSetting from "select-kit/components/list-setting";
 
 export default class ExtraGroupClassesGroupEdit extends Component {
   @service dialog;
@@ -39,4 +41,31 @@ export default class ExtraGroupClassesGroupEdit extends Component {
       );
     });
   }
+
+  <template>
+    {{! Only show these fields when editing an existing group }}
+    {{#if this.group.id}}
+
+      <div class="control-group">
+        <label class="control-label">{{i18n
+            "extra_group_classes.title"
+          }}</label>
+
+        <label for="extra_classes">
+          {{i18n "extra_group_classes.description"}}
+        </label>
+        <ListSetting
+          @name="extra_classes"
+          @class="extra-classes"
+          @value={{this.extraClasses}}
+          @choices={{this.extraClasses}}
+          @settingName="name"
+          @nameProperty={{null}}
+          @valueProperty={{null}}
+          @onChange={{action "extraGroupClassesChanged"}}
+          @options={{hash allowAny=true}}
+        />
+      </div>
+    {{/if}}
+  </template>
 }
