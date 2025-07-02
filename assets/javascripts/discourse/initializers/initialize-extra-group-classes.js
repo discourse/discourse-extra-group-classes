@@ -12,7 +12,7 @@ export default {
   name: "extra-group-classes",
   initialize() {
     // decorate posts within topics
-    withPluginApi("0.11.4", (api) => {
+    withPluginApi((api) => {
       api.addTrackedPostProperties("extra_classes");
       api.addPostClassesCallback((post) => {
         if (post.extra_classes) {
