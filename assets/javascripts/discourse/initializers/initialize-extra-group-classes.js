@@ -13,10 +13,10 @@ export default {
   initialize() {
     // decorate posts within topics
     withPluginApi("0.11.4", (api) => {
-      api.includePostAttributes("extra_classes");
-      api.addPostClassesCallback((attrs) => {
-        if (attrs.extra_classes) {
-          return parseClasses(attrs.extra_classes);
+      api.addTrackedPostProperties("extra_classes");
+      api.addPostClassesCallback((post) => {
+        if (post.extra_classes) {
+          return parseClasses(post.extra_classes);
         }
       });
 
