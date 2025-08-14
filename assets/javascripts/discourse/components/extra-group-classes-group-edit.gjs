@@ -62,7 +62,7 @@ export default class ExtraGroupClassesGroupEdit extends Component {
           @settingName="name"
           @nameProperty={{null}}
           @valueProperty={{null}}
-          @onChange={{action "extraGroupClassesChanged"}}
+          @onChange={{this.extraGroupClassesChanged}}
           @options={{hash allowAny=true}}
         />
       </div>
