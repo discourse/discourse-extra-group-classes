@@ -55,7 +55,7 @@ after_initialize do
   end
   add_to_serializer(:post, :include_extra_classes?) do
     fields = object.user&.primary_group&.custom_fields
-    !fields.nil? && !fields[ExtraGroupClasses::CUSTOM_FIELD].blank?
+    !fields.nil? && fields[ExtraGroupClasses::CUSTOM_FIELD].present?
   end
 
   add_to_class(Admin::GroupsController, :update_extra_group_classes) do
@@ -84,7 +84,7 @@ after_initialize do
       .each do |q|
         username = q["data-username"]
         fields = User.find_by(username: username)&.primary_group&.custom_fields
-        if !fields.nil? && !fields[ExtraGroupClasses::CUSTOM_FIELD].blank?
+        if !fields.nil? && fields[ExtraGroupClasses::CUSTOM_FIELD].present?
           extra_classes =
             fields[ExtraGroupClasses::CUSTOM_FIELD]
               .split("|")
