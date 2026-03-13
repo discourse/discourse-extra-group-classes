@@ -1,4 +1,4 @@
-import discourseComputed from "discourse/lib/decorators";
+import { computed } from "@ember/object";
 import { withPluginApi } from "discourse/lib/plugin-api";
 
 // Takes a list of classes like my-class1|my-class2
@@ -40,8 +40,8 @@ export default {
         "controller:user",
         (Superclass) =>
           class extends Superclass {
-            @discourseComputed("model.primary_group_name")
-            primaryGroup() {
+            @computed("model.primary_group_name")
+            get primaryGroup() {
               let groupClasses = super.primaryGroup;
               if (this.model && this.model.primary_group_extra_classes) {
                 let classes = this.model.primary_group_extra_classes;

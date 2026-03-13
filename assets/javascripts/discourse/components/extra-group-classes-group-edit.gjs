@@ -1,10 +1,11 @@
+/* eslint-disable ember/no-classic-components, ember/require-tagless-components */
 import Component from "@ember/component";
 import { hash } from "@ember/helper";
 import { action, computed } from "@ember/object";
 import { service } from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
+import ListSetting from "discourse/select-kit/components/list-setting";
 import { i18n } from "discourse-i18n";
-import ListSetting from "select-kit/components/list-setting";
 
 export default class ExtraGroupClassesGroupEdit extends Component {
   @service dialog;
